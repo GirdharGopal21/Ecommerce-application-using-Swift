@@ -1,114 +1,173 @@
-# Ecommerce-application-using-Swift
+# 🛍️ SwiftUI Fashion eCommerce App
 
 ![image alt](https://github.com/GirdharGopal21/Ecommerce-application-using-Swift/blob/8e5b127cf7dbaae0561b5214a03b84c04a7a0b83/eCommerce.png)
 
-Xcode project built in SwiftUI relating to an eCommerce app showcasing fashion products and enabling users to :
-
-=>create an account or login to an existing account
-
-=>browse the product catalog
-
-=>add/remove items to/from their favorites list
-
-=>add/remove items to/from their cart
-
-=>proceed with payment
-
-=>view orders history
-
-=>Project using Firebase and Stripe API.
-
-=>App architecture : Repository Design Pattern
 
 
-Usage
+A beautifully designed **eCommerce iOS application** built with **SwiftUI**, showcasing fashion products. Integrated with **Firebase** for backend services and **Stripe** for secure payment processing.
 
-Open the eCommerce.xcodeproj file with Xcode and build the application in the simulator or on a device.
+This project demonstrates best practices in iOS architecture using the **Repository Design Pattern**, ensuring scalability, testability, and separation of concerns.
 
+---
 
-Swift Package Manager dependencies
+## ✨ Features
 
-Firebase
+* 🔐 **User Authentication** – Sign up / Login via email & password (Firebase Auth)
+  
+* 🛍️ **Product Catalog** – Browse through a stylish fashion product catalog
+  
+* ❤️ **Favorites** – Add or remove products from a favorites list
+  
+* 🛒 **Cart** – Manage cart items and proceed to checkout
+  
+* 💳 **Secure Payment** – Seamless checkout with Stripe Payment Sheet
+  
+* 📦 **Order History** – View past purchases and order details
+  
+* 🎨 **Remote Config** – Dynamically change app colors without updating the app
+  
+* 📊 **Analytics** – Gain insight into user behavior and engagement
 
-
-This project uses several libraries provided by Firebase SDK for iOS platforms 
-
-
-=>Authentication : email and password based authentication
-
-=>Cloud Firestore : products and users data storage through collections and documents
-
-=>Cloud Storage : products images upload
-
-=>Analytics : for logging events that provide insight on app usage and user engagement
-
-=>Remote Config : used to change the colors of the app without publishing an app update
-
-=>Stripe API
-
-=>This project embeds Stripe iOS SDK and in particular the StripePaymentSheet module which provides a prebuilt payment UI.
-
-
-The payment method integration uses three Stripe API objects :
+---
 
 
-PaymentIntent : represents the intent to collect payment from a customer during the Checkout process. Charge attempts and payment state changes are tracked throughout the process.
+## 🏗️ App Architecture
 
-Customer : the Customer object is created during the Sign Up process.
+This app uses the **Repository Design Pattern**, which:
 
-Customer Ephemeral Key : grants the SDK temporary access to the Customer.
+* Promotes clean separation between the UI and data layers
+  
+* Improves code maintainability and testability
+  
+* Facilitates easy integration with multiple data sources (Firestore, Storage, REST API)
 
-For security reasons, Stripe does not allow the app to create these objects. Instead, this has to be done on a server-side (see related section below).
-
-
-*Note
-
-Stripe provides test cards numbers allowing to test the integration through various scenarios.
-
-For instance, filling out the credit card form using the credit card number 4242 4242 4242 4242 with any expiration in a future date, CVC, and postal code should lead to a payment success.
+---
 
 
-*Alamofire
+## 🔌 Dependencies
 
-This project uses Alamofire library to ease HTTP requests between the app and the server.
+### 🧩 Swift Package Manager
 
+This project uses the following packages:
 
-*Backend server
+* **[Firebase SDK for iOS](https://firebase.google.com/docs/ios/setup)**:
 
-As mentioned above, Stripe requires a server-side implementation.
+  * Authentication
+    
+  * Cloud Firestore
+    
+  * Cloud Storage
+    
+  * Analytics
+    
+  * Remote Config
 
-The server in this project is hosted on Glitch and has two endpoints.
+* **[Stripe iOS SDK](https://stripe.com/docs/payments/accept-a-payment?platform=ios)**:
 
+  * `StripePaymentSheet` module for a seamless checkout UI
 
-The /customers endpoint creates the Customer object.
+* **[Alamofire](https://github.com/Alamofire/Alamofire)**:
 
-Additionally, as stated on Stripe setup, the /checkout endpoint :
+  * Simplifies HTTP networking between the app and backend server
 
-
-retrieves the Customer
-
-creates an Ephemeral Key for the Customer
-
-creates a PaymentIntent, with the amount, currency, and customer
-
-returns the Payment Intent’s client secret, the Ephemeral Key’s secret, the Customer’s id, and the publishable key to the app.
-
-
-*Note
-
-For performance purposes, Glitch’s projects sleep after 5 minutes. Therefore, one may experience delay when interacting with the app during the processes involving calls to the server (i.e. Sign Up & Checkout).
+---
 
 
-*Database
+## 🧾 Stripe Integration Details
 
-Under the path eCommerce/Utilities/ProductData, you can find :
+Stripe integration uses three main objects:
 
-a folder /database containing the datasets set up from scratch that have been used in this project
+* **PaymentIntent** – Represents the payment flow
+  
+* **Customer** – Created during sign up
+  
+* **Ephemeral Key** – Grants temporary SDK access to the customer
+  
 
-a file ProductDataManager.swift defining the methods that have been used to load the data in Firestore
+### ⚠️ Note:
 
-For app leightweihting purpose, the images uploaded in Firestore have not been embedded in this project. However they can be retrieved within the file ProductDatabase.swift since the urls related to these images have been added to the ProductVariant model.
+Stripe requires server-side object creation. This project includes a simple backend hosted on **Glitch**.
 
-*Note
 
-Security Rules for both Firestore and Storage have been setup in the Firebase console.
+#### 🔗 Server Endpoints:
+
+* `/customers`: Creates a new Stripe Customer
+  
+* `/checkout`: Retrieves Customer, creates Ephemeral Key, PaymentIntent, and returns:
+
+  * Client Secret
+    
+  * Ephemeral Key Secret
+    
+  * Customer ID
+    
+  * Stripe Publishable Key
+
+📌 Test with Stripe card number: `4242 4242 4242 4242` (any future date, valid CVC & postal code)
+
+---
+
+
+## ☁️ Firebase Setup
+
+* **Firestore**: Stores products, variants, user data
+  
+* **Cloud Storage**: Uploads product images
+  
+* **Remote Config**: Dynamically change app theme colors
+  
+* **Analytics**: Track app usage and events
+
+Security rules have been configured in Firebase Console.
+
+---
+
+
+## 🗂️ Product Data
+
+Located in: `eCommerce/Utilities/ProductData/`
+
+* `/database/` – Contains initial product datasets
+  
+* `ProductDataManager.swift` – Loads product data into Firestore
+  
+* `ProductDatabase.swift` – Holds image URLs linked to product variants
+
+🖼️ Note: Product images are **not embedded** to reduce app size. Image URLs are fetched from Firestore dynamically.
+
+---
+
+
+## 🚀 Getting Started
+
+1. Clone the repository
+   
+2. Open `eCommerce.xcodeproj` in Xcode
+   
+3. Make sure you have configured Firebase properly in the project
+   
+4. Build and run on **iOS Simulator or a physical device**
+
+---
+
+
+## 🧪 Stripe Testing Cards
+
+| Card Type     | Number                | Outcome            |
+| ------------- | --------------------- | ------------------ |
+| Visa          | `4242 4242 4242 4242` | Payment success    |
+| 3D Secure     | `4000 0027 6000 3184` | Requires 3D Secure |
+| Declined Card | `4000 0000 0000 9995` | Payment failed     |
+
+---
+
+
+## 🛠️ Backend Glitch Note
+
+Glitch-hosted backend may sleep after 5 mins of inactivity, causing slight delays during **Sign Up** or **Checkout** operations.
+
+---
+
+
+
+
